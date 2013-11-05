@@ -107,9 +107,9 @@ public class AcompanhamentoBean extends AbstractManagerBean {
 	
 	public void salvar() {
 		try {
+			acompanhamentoService.save(selectedAcompanhamento);
 			Internacao inter = internacaoService.getById(selectedAcompanhamento.getInternacao().getId());
 			inter.setAcompanhamento(selectedAcompanhamento);
-			selectedAcompanhamento.setInternacao(inter);
 			acompanhamentoService.save(selectedAcompanhamento);
 			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Acompanhamento Paciente cadastrado com sucesso!", null);
 			FacesContext.getCurrentInstance().addMessage(null, message);

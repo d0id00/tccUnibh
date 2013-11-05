@@ -38,6 +38,6 @@
     </context-param>
     <context-param>
     	<param-name>primefaces.THEME</param-name>
-    	<param-value>start</param-value>
+    	<param-value>sam</param-value>
     </context-param>
 </web-app>
