@@ -1,0 +1,135 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui" >
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset-UTF-8" />
+   <link href="#{appBean.baseUrl}resources/css/default.css" rel="stylesheet" type="text/css" />
+   <link href="#{appBean.baseUrl}resources/css/cssLayout.css" rel="stylesheet" type="text/css" />
+</h:head>
+	<h:body>
+		<div id="top" class="title ui-widget-header ui-corner-all">
+		</div>
+		<div id="menu">
+			<h:form>  
+			    <p:menubar>  
+			        <p:submenu label="Cadastro" icon="ui-icon-document">  
+		                <p:menuitem value="#{bundle.Usuario}" url="#{appBean.basePath}usuario/usuario.jsf" />  
+		                <p:menuitem value="#{bundle.Paciente}" url="#{appBean.basePath}paciente/paciente.jsf" />  
+			        </p:submenu>  
+			  
+			        <p:submenu label="Internação" icon="ui-icon-pencil">  
+			            <p:menuitem value="#{bundle.Internacao}" url="#{appBean.basePath}paciente/internacaopaciente.jsf" icon="ui-icon-arrowreturnthick-1-w" />  
+			        </p:submenu>  
+			  
+			        <p:submenu label="Acompanhamento" icon="ui-icon-help">  
+			            <p:menuitem value="#{bundle.Acompanhamento}" url="#{appBean.basePath}paciente/acompanhamentointernacaopaciente.jsf" />  
+			        </p:submenu>  
+			  
+			        <p:menuitem value="Sair" actionListener="#{loginBean.logout}" icon="ui-icon-close" oncomplete="handleLoginRequest(xhr, status, args)"/>  
+			    </p:menubar>  
+			</h:form>  
+		</div>
+		<div id="content" class="center_content ui-widget ui-widget-content ui-corner-all">
+			<div id="container">
+				<p:growl id="msgs" showDetail="true" />
+				<h:form>
+					<p:commandButton id="btnCreateUsuario" update=":formCreate" oncomplete="dialogUsuarioCreate.show()" 
+						icon="ui-icon-document" title="#{bundle.CriarUsuario}" value="#{bundle.CriarUsuario}"/>
+				</h:form>
+				<h:form id="formDataTable">
+					<p:dataTable id="tabelaUsuario" var="user" value="#{usuarioBean.usuarios}">
+						<p:column headerText="#{bundle.Codigo}" style="width:10%">
+							<h:outputText value="#{user.id}" />
+						</p:column>
+						<p:column headerText="#{bundle.Nome}" style="width:50%">
+							<h:outputText value="#{user.nome}" />
+						</p:column>
+						<p:column headerText="#{bundle.Login}" style="width:15%">
+							<h:outputText value="#{user.login}" />
+						</p:column>
+						<p:column headerText="#{bundle.Status}" style="width:10%">
+							<h:outputText value="#{user.status}" />
+						</p:column>
+						<p:column headerText="#{bundle.Data}" style="width:10%">
+							<h:outputText value="#{user.dataReg.time}" >
+								<f:convertDateTime/>
+							</h:outputText>
+						</p:column>
+						<p:column style="width:5%">
+							<p:commandButton id="btnUpdateUsuario" update=":formUpdate" oncomplete="dialogUsuarioUpdate.show()" 
+								icon="ui-icon-note" title="#{bundle.AlterarUsuario}">
+								<f:setPropertyActionListener value="#{user}" target="#{usuarioBean.selectedUsuario}" />
+							</p:commandButton>
+							<p:commandButton id="btnDeleteUsuario" update=":formDataTable :msgs" icon="ui-icon-trash" title="#{bundle.RemoverUsuario}" action="#{usuarioBean.remover}">
+								<f:setPropertyActionListener value="#{user}" target="#{usuarioBean.selectedUsuario}" />
+						        <p:confirm header="#{bundle.AcaoRemoverUsuario}" message="#{bundle.AcaoRemoverUsuario}" icon="ui-icon-alert" />  
+							    <p:confirmDialog global="true" showEffect="fade" hideEffect="explode">  
+							        <p:commandButton value="#{bundle.Sim}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>  
+							        <p:commandButton value="#{bundle.Nao}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>       
+							    </p:confirmDialog>
+							</p:commandButton>
+						</p:column>
+					</p:dataTable>
+					</h:form>
+					<h:form id="formUpdate">
+						<p:dialog header="#{bundle.AlterarUsuario}" widgetVar="dialogUsuarioUpdate"
+						resizable="false" id="dlgUsuarioUpdate" showEffect="fade"
+						hideEffect="explode" modal="true">
+						<h:panelGrid id="display" columns="2" cellpadding="4" style="margin:0 auto;">
+							<h:outputText value="#{bundle.Codigo}" />
+							<p:inputText value="#{usuarioBean.selectedUsuario.id}" readonly="true" size="10"/>
+							<h:outputText value="#{bundle.nome}" />
+							<p:inputText value="#{usuarioBean.selectedUsuario.nome}" size="60" />
+							<h:outputText value="#{bundle.login}" />
+							<p:inputText value="#{usuarioBean.selectedUsuario.login}" size="30" />
+							<f:facet name="footer">
+								<p:separator />
+								<p:commandButton id="btnUpdateSalvar" update=":formDataTable :msgs" oncomplete="dialogUsuarioUpdate.hide()" icon="ui-icon-disk" title="#{bundle.salvar}" value="#{bundle.salvar}" action="#{usuarioBean.atualizar}" />
+								<p:commandButton id="btnUpdateCancelar" oncomplete="dialogUsuarioUpdate.hide()" icon="ui-icon-cancel" title="#{bundle.cancelar}" value="#{bundle.cancelar}" action="#{usuarioBean.novoUsuario}"/>
+							</f:facet>
+						</h:panelGrid>
+					</p:dialog>
+				</h:form>
+				<h:form id="formCreate">
+					<p:dialog header="#{bundle.CriarUsuario}" widgetVar="dialogUsuarioCreate"
+						resizable="false" id="dlgUsuarioCreate" showEffect="fade"
+						hideEffect="explode" modal="true">
+						<h:panelGrid id="display" columns="2" cellpadding="4" style="margin:0 auto;">
+							<h:outputText value="#{bundle.nome}" />
+							<p:inputText id="nome" value="#{usuarioBean.selectedUsuario.nome}" size="60" />
+							<h:outputText value="#{bundle.login}" />
+							<p:inputText id="login" value="#{usuarioBean.selectedUsuario.login}" size="30"/>
+							<h:outputText value="#{bundle.senha}" />
+							<p:password id="feedback" value="#{usuarioBean.selectedUsuario.senha}" feedback="true" maxlength="8" size="10"/>
+							<f:facet name="footer">
+								<p:separator />
+								<p:commandButton id="btnUpdateSalvar" update=":formDataTable :msgs" oncomplete="dialogUsuarioCreate.hide()" icon="ui-icon-disk" title="#{bundle.salvar}" value="#{bundle.salvar}" action="#{usuarioBean.salvar}" />
+								<p:commandButton id="btnCreateCancelar" oncomplete="dialogUsuarioCreate.hide()" icon="ui-icon-cancel" title="#{bundle.cancelar}" value="#{bundle.cancelar}"/>
+							</f:facet>
+						</h:panelGrid>
+					</p:dialog>
+				</h:form>
+			</div>
+		</div>
+		<div id="bottom" class="ui-widget-header ui-corner-all">
+			&copy;2013
+		</div>
+		
+		<script type="text/javascript">  
+		    function handleLoginRequest(xhr, status, args) {
+		        if(args.loggerOut || !args.loggedIn) {
+			        location.href = args.url;
+			    }
+		    }
+		    function handleSubmit(xhr, status, args, dialog) {
+		        var jqDialog = jQuery('#'+dialog.id);
+		        if(args.validationFailed) {
+		            jqDialog.effect('shake', { times:3 }, 100);
+		        } else {
+		            dialog.hide();
+		        }
+		    }
+		</script>
+	</h:body>
+</html>

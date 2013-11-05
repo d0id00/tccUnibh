@@ -1,0 +1,78 @@
+#topMessage {
+	vertical-align: middle;
+}
+
+html {
+	overflow: hidden;
+}
+
+body {
+	overflow: hidden;
+	padding: 0;
+	margin: 0;
+	width: 100%;
+	height: 100%;
+}
+
+h1 {
+	color: black;
+}
+
+a:link,a:visited,a:hover,a:active {
+	color: black;	
+}
+
+.menuButton{
+	font-weight: bold;
+	font-size: 23px;
+	top:50px;
+	bottom: 10px;
+}
+
+#divTop {
+	padding: 0;
+	padding-left: 1024px;
+	margin: 0;
+	position: absolute;
+	top: 5px;
+	left: 0px;
+	right: 0px;
+	height: 38px;
+	overflow: hidden;
+	background: #dddddd;
+	font-size: 8px;
+	vertical-align: center;
+	text-align: right;
+}
+
+#divLeft {
+	padding: 0;
+	margin: 0;
+	position: absolute;
+	top: 50px;
+	left: 10px;
+	bottom: 5px;
+	overflow: auto;
+	width: 230px;
+	font-size: 10px;	
+	border: thin solid lightGray;
+}
+
+#divMain {
+	padding: 0;
+	padding-top: 5px;
+	margin: 0;
+	position: absolute;
+	top: 50px;
+	left: 280px;
+	right: 20px;
+	bottom: 5px;
+	overflow: auto;
+}
+.ui-widget {  
+        font-size: 12px !important;  
+}
+.wijmo-wijmenu .wijmo-wijmenu-list .wijmo-wijmenu-item {    
+background: none !important;    
+border: none !important;    
+}   

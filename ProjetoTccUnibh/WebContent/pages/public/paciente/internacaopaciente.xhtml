@@ -1,0 +1,140 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset-UTF-8" />
+   <link href="#{appBean.baseUrl}resources/css/default.css" rel="stylesheet" type="text/css" />
+   <link href="#{appBean.baseUrl}resources/css/cssLayout.css" rel="stylesheet" type="text/css" />
+</h:head>
+	<h:body>
+		<div id="top" class="title ui-widget-header ui-corner-all">
+		</div>
+		<div id="menu">
+			<h:form>  
+			    <p:menubar>  
+			        <p:submenu label="Cadastro" icon="ui-icon-document">  
+		                <p:menuitem value="#{bundle.Usuario}" url="#{appBean.basePath}usuario/usuario.jsf" />  
+		                <p:menuitem value="#{bundle.Paciente}" url="#{appBean.basePath}paciente/paciente.jsf" />  
+			        </p:submenu>  
+			  
+			        <p:submenu label="Internação" icon="ui-icon-pencil">  
+			            <p:menuitem value="#{bundle.Internacao}" url="#{appBean.basePath}paciente/internacaopaciente.jsf" icon="ui-icon-arrowreturnthick-1-w" />  
+			        </p:submenu>  
+			  
+			        <p:submenu label="Acompanhamento" icon="ui-icon-help">  
+			            <p:menuitem value="#{bundle.Acompanhamento}" url="#{appBean.basePath}paciente/acompanhamentointernacaopaciente.jsf" />  
+			        </p:submenu>  
+			  
+			        <p:menuitem value="Sair" actionListener="#{loginBean.logout}" icon="ui-icon-close" oncomplete="handleLoginRequest(xhr, status, args)"/>  
+			    </p:menubar>  
+			</h:form>  
+		</div>
+		<div id="content" class="center_content ui-widget ui-widget-content ui-corner-all">
+			<div id="container">
+				<p:growl id="msgs" showDetail="true" />
+				<h:form>
+					<p:commandButton id="btnCreateInternacao" update=":formCreate" oncomplete="dialogInternacaoCreate.show()" 
+						icon="ui-icon-document" title="#{bundle.CriarInternacao}" value="#{bundle.CriarInternacao}"/>
+				</h:form>
+				<h:form id="formDataTable">
+					<p:dataTable id="tabelaPaciente" var="internacao" value="#{internacaoBean.internacoes}">
+						<p:column headerText="#{bundle.Codigo}" style="width:10%">
+							<h:outputText value="#{internacao.id}" />
+						</p:column>
+						<p:column headerText="#{bundle.Nome}" style="width:42%">
+							<h:outputText value="#{internacao.paciente.nome}" />
+						</p:column>
+						<p:column headerText="#{bundle.Internacao}" style="width:10%">
+							<h:outputText value="#{internacao.dataInternacao.time}" >
+								<f:convertDateTime/>
+							</h:outputText>
+						</p:column>
+						<p:column headerText="#{bundle.Diagnostico}" style="width:10%">
+							<h:outputText value="#{internacao.diagnostico}" />
+						</p:column>
+						<p:column headerText="#{bundle.Observacao}" style="width:10%">
+							<h:outputText value="#{internacao.observacao}" />
+						</p:column>
+						<p:column style="width:7%">
+							<p:commandButton id="btnUpdateInternacao" update=":formUpdate" oncomplete="dialogInternacaoUpdate.show()" 
+								icon="ui-icon-note" title="#{bundle.AlterarInternacao}">
+								<f:setPropertyActionListener value="#{internacao}" target="#{internacaoBean.selectedInternacao}" />
+							</p:commandButton>
+							<p:commandButton id="btnDeletePaciente" update=":formDataTable :msgs" icon="ui-icon-trash" title="#{bundle.RemoverInternacao}" action="#{internacaoBean.remover}">
+								<f:setPropertyActionListener value="#{internacao}" target="#{internacaoBean.selectedInternacao}" />
+						        <p:confirm header="#{bundle.AcaoRemoverInternacao}" message="#{bundle.AcaoRemoverInternacao}" icon="ui-icon-alert" />  
+							    <p:confirmDialog global="true" showEffect="fade" hideEffect="explode">  
+							        <p:commandButton value="#{bundle.Sim}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>  
+							        <p:commandButton value="#{bundle.Nao}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>       
+							    </p:confirmDialog>
+							</p:commandButton>
+						</p:column>
+					</p:dataTable>
+					</h:form>
+					<h:form id="formUpdate">
+						<p:dialog header="#{bundle.AlterarInternacao}" widgetVar="dialogInternacaoUpdate"
+						resizable="false" id="dlgInternacaoUpdate" showEffect="fade"
+						hideEffect="explode" modal="true">
+						<h:panelGrid id="display" columns="2" cellpadding="4" style="margin:0 auto;">
+							<h:outputText value="#{bundle.codigo}" />
+							<p:inputText value="#{internacaoBean.selectedInternacao.id}" readonly="true" size="10"/>
+							<h:outputText value="#{bundle.nome}" />
+							<p:autoComplete value="#{internacaoBean.selectedInternacao.paciente}" completeMethod="#{internacaoBean.pacientes}" size="80" 
+								converter="#{pacienteConverter}" var="pac" itemLabel="#{pac.nome}" itemValue="#{pac}" forceSelection="true"/>
+							<h:outputText value="#{bundle.internacao}" />
+							<p:calendar value="#{internacaoBean.selectedInternacao.dataInternacao}" size="10" />
+							<h:outputText value="#{bundle.diagnostico}" />
+							<p:inputText value="#{internacaoBean.selectedInternacao.diagnostico}" size="30" />
+							<h:outputText value="#{bundle.observacao}" />
+							<p:inputTextarea value="#{internacaoBean.selectedInternacao.observacao}" rows="6" cols="80" />
+							<f:facet name="footer">
+								<p:separator />
+								<p:commandButton id="btnUpdateSalvar" update=":formDataTable :msgs" oncomplete="dialogInternacaoUpdate.hide()" icon="ui-icon-disk" title="#{bundle.salvar}" value="#{bundle.salvar}" action="#{internacaoBean.atualizar}" />
+								<p:commandButton id="btnUpdateCancelar" oncomplete="dialogInternacaoUpdate.hide()" icon="ui-icon-cancel" title="#{bundle.cancelar}" value="#{bundle.cancelar}" action="#{internacaoBean.novoInternacao}"/>
+							</f:facet>
+						</h:panelGrid>
+					</p:dialog>
+				</h:form>
+				<h:form id="formCreate">
+					<p:dialog header="#{bundle.CriarInternacao}" widgetVar="dialogInternacaoCreate"
+						resizable="false" id="dlgInternacaoCreate" showEffect="fade"
+						hideEffect="explode" modal="true">
+						<h:panelGrid id="display" columns="2" cellpadding="4" style="margin:0 auto;">
+							<h:outputText value="#{bundle.Internacao}" />
+							<p:calendar value="#{internacaoBean.selectedInternacao.dataInternacao}" size="10" />
+							<h:outputText value="#{bundle.Paciente}" />
+							<p:autoComplete value="#{internacaoBean.selectedInternacao.paciente}" completeMethod="#{internacaoBean.pacientes}" size="80" 
+								converter="#{pacienteConverter}" var="pac" itemLabel="#{pac.nome}" itemValue="#{pac}" forceSelection="true"/>
+							<h:outputText value="#{bundle.Diagnostico}" />
+							<p:inputText value="#{internacaoBean.selectedInternacao.diagnostico}" size="80"/>
+							<h:outputText value="#{bundle.Observacao}" />
+							<p:inputTextarea value="#{internacaoBean.selectedInternacao.observacao}" rows="6" cols="80" />
+							<f:facet name="footer">
+								<p:separator />
+								<p:commandButton id="btnUpdateSalvar" update=":formDataTable :msgs" oncomplete="dialogInternacaoCreate.hide()" icon="ui-icon-disk" title="#{bundle.salvar}" value="#{bundle.salvar}" action="#{internacaoBean.salvar}" ajax="false" />
+								<p:commandButton id="btnCreateCancelar" oncomplete="dialogInternacaoCreate.hide()" icon="ui-icon-cancel" title="#{bundle.cancelar}" value="#{bundle.cancelar}"/>
+							</f:facet>
+						</h:panelGrid>
+					</p:dialog>
+				</h:form>
+			</div>
+		</div>
+		
+		<script type="text/javascript">  
+		    function handleLoginRequest(xhr, status, args) {
+		        if(args.loggerOut || !args.loggedIn) {
+			        location.href = args.url;
+			    }
+		    }
+		    function handleSubmit(xhr, status, args, dialog) {
+		        var jqDialog = jQuery('#'+dialog.id);
+		        if(args.validationFailed) {
+		            jqDialog.effect('shake', { times:3 }, 100);
+		        } else {
+		            dialog.hide();
+		        }
+		    }
+		</script>
+	</h:body>
+</html>

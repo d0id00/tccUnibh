@@ -1,0 +1,160 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset-UTF-8" />
+   <link href="#{appBean.baseUrl}resources/css/default.css" rel="stylesheet" type="text/css" />
+   <link href="#{appBean.baseUrl}resources/css/cssLayout.css" rel="stylesheet" type="text/css" />
+</h:head>
+	<h:body>
+		<div id="top" class="title ui-widget-header ui-corner-all">
+		</div>
+		<div id="menu">
+			<h:form>  
+			    <p:menubar>  
+			        <p:submenu label="Cadastro" icon="ui-icon-document">  
+		                <p:menuitem value="#{bundle.Usuario}" url="#{appBean.basePath}usuario/usuario.jsf" />  
+		                <p:menuitem value="#{bundle.Paciente}" url="#{appBean.basePath}paciente/paciente.jsf" />  
+			        </p:submenu>  
+			  
+			        <p:submenu label="Internação" icon="ui-icon-pencil">  
+			            <p:menuitem value="#{bundle.Internacao}" url="#{appBean.basePath}paciente/internacaopaciente.jsf" icon="ui-icon-arrowreturnthick-1-w" />  
+			        </p:submenu>  
+			  
+			        <p:submenu label="Acompanhamento" icon="ui-icon-help">  
+			            <p:menuitem value="#{bundle.Acompanhamento}" url="#{appBean.basePath}paciente/acompanhamentointernacaopaciente.jsf" />  
+			        </p:submenu>  
+			  
+			        <p:menuitem value="Sair" actionListener="#{loginBean.logout}" icon="ui-icon-close" oncomplete="handleLoginRequest(xhr, status, args)"/>  
+			    </p:menubar>  
+			</h:form>  
+		</div>
+		<div id="content" class="center_content ui-widget ui-widget-content ui-corner-all">
+			<div id="container">
+				<p:growl id="msgs" showDetail="true" />
+				<h:form>
+					<p:commandButton id="btnCreateAcompanhamento" update=":formCreate" oncomplete="dialogAcompanhamentoCreate.show()" 
+						icon="ui-icon-document" title="#{bundle.CriarAcompanhamento}" value="#{bundle.CriarAcompanhamento}"/>
+				</h:form>
+				<h:form id="formDataTable">
+					<p:dataTable id="tabelaAcompanhamento" var="acompanhamento" value="#{acompanhamentoBean.acompanhamentos}">
+						<p:column headerText="#{bundle.Codigo}" style="width:10%">
+							<h:outputText value="#{acompanhamento.id}" />
+						</p:column>
+						<p:column headerText="#{bundle.Nome}" style="width:42%">
+							<h:outputText value="#{acompanhamento.internacao.paciente.nome}" />
+						</p:column>
+						<p:column headerText="#{bundle.Diagnostico}" style="width:42%">
+							<h:outputText value="#{acompanhamento.internacao.diagnostico}" />
+						</p:column>
+						<p:column headerText="#{bundle.Acompanhamento}" style="width:10%">
+							<h:outputText value="#{acompanhamento.dataAcompanhamento.time}" >
+								<f:convertDateTime/>
+							</h:outputText>
+						</p:column>
+						<p:column headerText="#{bundle.Desfecho}" style="width:10%">
+							<h:outputText value="#{acompanhamento.desfecho}" />
+						</p:column>
+						<p:column headerText="#{bundle.ViaAdministracao}" style="width:10%">
+							<h:outputText value="#{acompanhamento.viaAdministracao}" />
+						</p:column>
+						<p:column style="width:7%">
+							<p:commandButton id="btnUpdateAcompanhamento" update=":formUpdate" oncomplete="dialogAcompanhamentoUpdate.show()" 
+								icon="ui-icon-note" title="#{bundle.AlterarAcompanhamento}">
+								<f:setPropertyActionListener value="#{acompanhamento}" target="#{acompanhamentoBean.selectedAcompanhamento}" />
+							</p:commandButton>
+							<p:commandButton id="btnDeletePaciente" update=":formDataTable :msgs" icon="ui-icon-trash" title="#{bundle.RemoverAcompanhamento}" action="#{acompanhamentoBean.remover}">
+								<f:setPropertyActionListener value="#{acompanhamento}" target="#{acompanhamentoBean.selectedAcompanhamento}" />
+						        <p:confirm header="#{bundle.AcaoRemoverAcompanhamento}" message="#{bundle.AcaoRemoverAcompanhamento}" icon="ui-icon-alert" />  
+							    <p:confirmDialog global="true" showEffect="fade" hideEffect="explode">  
+							        <p:commandButton value="#{bundle.Sim}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>  
+							        <p:commandButton value="#{bundle.Nao}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>       
+							    </p:confirmDialog>
+							</p:commandButton>
+						</p:column>
+					</p:dataTable>
+					</h:form>
+					<h:form id="formUpdate">
+						<p:dialog header="#{bundle.AlterarAcompanhamento}" widgetVar="dialogAcompanhamentoUpdate"
+						resizable="false" id="dlgAcompanhamentoUpdate" showEffect="fade"
+						hideEffect="explode" modal="true">
+						<h:panelGrid id="display" columns="2" cellpadding="4" style="margin:0 auto;">
+							<h:outputText value="#{bundle.codigo}" />
+							<p:inputText value="#{acompanhamentoBean.selectedAcompanhamento.id}" readonly="true" size="10"/>
+							<h:outputText value="#{bundle.internacao}" />
+							<p:autoComplete value="#{acompanhamentoBean.selectedAcompanhamento.internacao}" completeMethod="#{acompanhamentoBean.internacoes}" size="80" 
+								converter="#{internacaoConverter}" var="inter" itemLabel="#{inter.paciente.nome}" itemValue="#{inter}" forceSelection="true"/>
+							<h:outputText value="#{bundle.status}" />
+							<p:selectOneMenu value="#{acompanhamentoBean.selectedAcompanhamento.status}" effect="fade" converter="#{statusConverter}">  
+				                <f:selectItem itemLabel="#{bundle.Selecione}" itemValue="" />  
+				                <f:selectItems value="#{acompanhamentoBean.statusForOther}" var="stat" itemLabel="#{stat.nome}" itemValue="#{stat}"/>  
+				            </p:selectOneMenu> 
+							<h:outputText value="#{bundle.viaAdministracao}" />
+							<p:selectOneMenu value="#{acompanhamentoBean.selectedAcompanhamento.viaAdministracao}">  
+				                <f:selectItem itemLabel="#{bundle.Selecione}" itemValue="" />  
+				                <f:selectItems value="#{acompanhamentoBean.viaAdministracao}" />  
+				            </p:selectOneMenu> 
+							<h:outputText value="#{bundle.desfecho}" />
+							<p:selectOneMenu value="#{acompanhamentoBean.selectedAcompanhamento.desfecho}">  
+				                <f:selectItem itemLabel="#{bundle.Selecione}" itemValue="" />  
+				                <f:selectItems value="#{acompanhamentoBean.desfecho}" />  
+				            </p:selectOneMenu>
+							<h:outputText value="#{bundle.observacao}" />
+							<p:inputTextarea value="#{acompanhamentoBean.selectedAcompanhamento.observacao}" rows="6" cols="80" />
+							<f:facet name="footer">
+								<p:separator />
+								<p:commandButton id="btnUpdateSalvar" update=":formDataTable :msgs" oncomplete="dialogAcompanhamentoUpdate.hide()" icon="ui-icon-disk" title="#{bundle.salvar}" value="#{bundle.salvar}" action="#{acompanhamentoBean.atualizar}" ajax="false" />
+								<p:commandButton id="btnUpdateCancelar" oncomplete="dialogAcompanhamentoUpdate.hide()" icon="ui-icon-cancel" title="#{bundle.cancelar}" value="#{bundle.cancelar}" action="#{acompanhamentoBean.novoAcompanhamento}"/>
+							</f:facet>
+						</h:panelGrid>
+					</p:dialog>
+				</h:form>
+				<h:form id="formCreate">
+					<p:dialog header="#{bundle.CriarAcompanhamento}" widgetVar="dialogAcompanhamentoCreate"
+						resizable="false" id="dlgAcompanhamentoCreate" showEffect="fade"
+						hideEffect="explode" modal="true">
+						<h:panelGrid id="display" columns="2" cellpadding="4" style="margin:0 auto;">
+							<h:outputText value="#{bundle.Acompanhamento}" />
+							<p:calendar value="#{acompanhamentoBean.selectedAcompanhamento.dataAcompanhamento}" size="10" />
+							<h:outputText value="#{bundle.Internacao}" />
+							<p:autoComplete value="#{acompanhamentoBean.selectedAcompanhamento.internacao}" completeMethod="#{acompanhamentoBean.internacoes}" size="80" 
+								converter="#{internacaoConverter}" var="inter" itemLabel="#{inter.paciente.nome}" itemValue="#{inter}" forceSelection="true"/>
+							<h:outputText value="#{bundle.viaAdministracao}" />
+							<p:selectOneMenu value="#{acompanhamentoBean.selectedAcompanhamento.viaAdministracao}">  
+				                <f:selectItem itemLabel="#{bundle.Selecione}" itemValue="" />  
+				                <f:selectItems value="#{acompanhamentoBean.viaAdministracao}" />  
+				            </p:selectOneMenu> 
+							<h:outputText value="#{bundle.observacao}" />
+							<p:inputTextarea value="#{acompanhamentoBean.selectedAcompanhamento.observacao}" rows="6" cols="80" />
+							<f:facet name="footer">
+								<p:separator />
+								<p:commandButton id="btnUpdateSalvar" update=":formDataTable :msgs" oncomplete="dialogAcompanhamentoCreate.hide()" icon="ui-icon-disk" title="#{bundle.salvar}" value="#{bundle.salvar}" action="#{acompanhamentoBean.salvar}" ajax="false" />
+								<p:commandButton id="btnCreateCancelar" oncomplete="dialogAcompanhamentoCreate.hide()" icon="ui-icon-cancel" title="#{bundle.cancelar}" value="#{bundle.cancelar}"/>
+							</f:facet>
+						</h:panelGrid>
+					</p:dialog>
+				</h:form>
+			</div>
+		</div>
+		<div id="bottom" class="ui-widget-header ui-corner-all">
+			&copy;2013
+		</div>
+		
+		<script type="text/javascript">  
+		    function handleLoginRequest(xhr, status, args) {
+		        if(args.loggerOut || !args.loggedIn) {
+			        location.href = args.url;
+			    }
+		    }
+		    function handleSubmit(xhr, status, args, dialog) {
+		        var jqDialog = jQuery('#'+dialog.id);
+		        if(args.validationFailed) {
+		            jqDialog.effect('shake', { times:3 }, 100);
+		        } else {
+		            dialog.hide();
+		        }
+		    }
+		</script>
+	</h:body>
+</html>

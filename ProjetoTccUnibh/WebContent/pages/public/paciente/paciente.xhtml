@@ -1,0 +1,147 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset-UTF-8" />
+   <link href="#{appBean.baseUrl}resources/css/default.css" rel="stylesheet" type="text/css" />
+   <link href="#{appBean.baseUrl}resources/css/cssLayout.css" rel="stylesheet" type="text/css" />
+</h:head>
+	<h:body>
+		<div id="top" class="title ui-widget-header ui-corner-all">
+		</div>
+		<div id="menu">
+			<h:form>  
+			    <p:menubar>  
+			        <p:submenu label="Cadastro" icon="ui-icon-document">  
+		                <p:menuitem value="#{bundle.Usuario}" url="#{appBean.basePath}usuario/usuario.jsf" />  
+		                <p:menuitem value="#{bundle.Paciente}" url="#{appBean.basePath}paciente/paciente.jsf" />  
+			        </p:submenu>  
+			  
+			        <p:submenu label="Internação" icon="ui-icon-pencil">  
+			            <p:menuitem value="#{bundle.Internacao}" url="#{appBean.basePath}paciente/internacaopaciente.jsf" icon="ui-icon-arrowreturnthick-1-w" />  
+			        </p:submenu>  
+			  
+			        <p:submenu label="Acompanhamento" icon="ui-icon-help">  
+			            <p:menuitem value="#{bundle.Acompanhamento}" url="#{appBean.basePath}paciente/acompanhamentointernacaopaciente.jsf" />  
+			        </p:submenu>  
+			  
+			        <p:menuitem value="Sair" actionListener="#{loginBean.logout}" icon="ui-icon-close" oncomplete="handleLoginRequest(xhr, status, args)"/>  
+			    </p:menubar>  
+			</h:form>  
+		</div>
+		<div id="content" class="center_content ui-widget ui-widget-content ui-corner-all">
+			<div id="container">
+				<p:growl id="msgs" showDetail="true" />
+				<h:form>
+					<p:commandButton id="btnCreatePaciente" update=":formCreate" oncomplete="dialogPacienteCreate.show()" 
+						icon="ui-icon-document" title="#{bundle.CriarPaciente}" value="#{bundle.CriarPaciente}"/>
+				</h:form>
+				<h:form id="formDataTable">
+					<p:dataTable id="tabelaPaciente" var="paciente" value="#{pacienteBean.pacientes}">
+						<p:column headerText="#{bundle.Codigo}" style="width:10%">
+							<h:outputText value="#{paciente.id}" />
+						</p:column>
+						<p:column headerText="#{bundle.Nome}" style="width:43%">
+							<h:outputText value="#{paciente.nome}" />
+						</p:column>
+						<p:column headerText="#{bundle.Idade}" style="width:10%">
+							<h:outputText value="#{paciente.idade}" />
+						</p:column>
+						<p:column headerText="#{bundle.Altura}" style="width:10%">
+							<h:outputText value="#{paciente.altura}" />
+						</p:column>
+						<p:column headerText="#{bundle.Peso}" style="width:10%">
+							<h:outputText value="#{paciente.peso}" />
+						</p:column>
+						<p:column headerText="#{bundle.IMC}" style="width:10%">
+							<h:outputText value="#{paciente.imc}" />
+						</p:column>
+						<p:column style="width:7%">
+							<p:commandButton id="btnUpdatePaciente" update=":formUpdate" oncomplete="dialogPacienteUpdate.show()" 
+								icon="ui-icon-note" title="#{bundle.AlterarPaciente}">
+								<f:setPropertyActionListener value="#{paciente}" target="#{pacienteBean.selectedPaciente}" />
+							</p:commandButton>
+							<p:commandButton id="btnDeletePaciente" update=":formDataTable :msgs" icon="ui-icon-trash" title="#{bundle.RemoverPaciente}" action="#{pacienteBean.remover}">
+								<f:setPropertyActionListener value="#{paciente}" target="#{pacienteBean.selectedPaciente}" />
+						        <p:confirm header="#{bundle.AcaoRemoverPaciente}" message="#{bundle.AcaoRemoverPaciente}" icon="ui-icon-alert" />  
+							    <p:confirmDialog global="true" showEffect="fade" hideEffect="explode">  
+							        <p:commandButton value="#{bundle.Sim}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>  
+							        <p:commandButton value="#{bundle.Nao}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>       
+							    </p:confirmDialog>
+							</p:commandButton>
+						</p:column>
+					</p:dataTable>
+					</h:form>
+					<h:form id="formUpdate">
+						<p:dialog header="#{bundle.AlterarPaciente}" widgetVar="dialogPacienteUpdate"
+						resizable="false" id="dlgPacienteUpdate" showEffect="fade"
+						hideEffect="explode" modal="true">
+						<h:panelGrid id="display" columns="2" cellpadding="4" style="margin:0 auto;">
+							<h:outputText value="#{bundle.Codigo}" />
+							<p:inputText value="#{pacienteBean.selectedPaciente.id}" readonly="true" size="10"/>
+							<h:outputText value="#{bundle.nome}" />
+							<p:inputText value="#{pacienteBean.selectedPaciente.nome}" size="60" />
+							<h:outputText value="#{bundle.idade}" />
+							<p:inputText value="#{pacienteBean.selectedPaciente.idade}" size="30" />
+							<h:outputText value="#{bundle.altura}" />
+							<p:inputText value="#{pacienteBean.selectedPaciente.altura}" size="30" />
+							<h:outputText value="#{bundle.peso}" />
+							<p:inputText value="#{pacienteBean.selectedPaciente.peso}" size="30" />
+							<h:outputText value="#{bundle.imc}" />
+							<p:inputText value="#{pacienteBean.selectedPaciente.imc}" size="30" />
+							<f:facet name="footer">
+								<p:separator />
+								<p:commandButton id="btnUpdateSalvar" update=":formDataTable :msgs" oncomplete="dialogPacienteUpdate.hide()" icon="ui-icon-disk" title="#{bundle.salvar}" value="#{bundle.salvar}" action="#{pacienteBean.atualizar}" />
+								<p:commandButton id="btnUpdateCancelar" oncomplete="dialogPacienteUpdate.hide()" icon="ui-icon-cancel" title="#{bundle.cancelar}" value="#{bundle.cancelar}" action="#{pacienteBean.novoPaciente}"/>
+							</f:facet>
+						</h:panelGrid>
+					</p:dialog>
+				</h:form>
+				<h:form id="formCreate">
+					<p:dialog header="#{bundle.CriarUsuario}" widgetVar="dialogPacienteCreate"
+						resizable="false" id="dlgPacienteCreate" showEffect="fade"
+						hideEffect="explode" modal="true">
+						<h:panelGrid id="display" columns="2" cellpadding="4" style="margin:0 auto;">
+							<h:outputText value="#{bundle.nome}" />
+							<p:inputText value="#{pacienteBean.selectedPaciente.nome}" size="60" />
+							<h:outputText value="#{bundle.idade}" />
+							<p:inputMask value="#{pacienteBean.selectedPaciente.idade}" size="30" mask="99"/>
+							<h:outputText value="#{bundle.altura}" />
+							<p:inputMask value="#{pacienteBean.selectedPaciente.altura}" size="30" mask="9.99"/>
+							<h:outputText value="#{bundle.peso}" />
+							<p:inputMask value="#{pacienteBean.selectedPaciente.peso}" size="30" mask="999.99"/>
+							<h:outputText value="#{bundle.imc}" />
+							<p:inputMask value="#{pacienteBean.selectedPaciente.imc}" size="30" mask="99.99"/>
+							<p:inputText value="#{pacienteBean.selectedPaciente.usuario}" type="hidden" />
+							<f:facet name="footer">
+								<p:separator />
+								<p:commandButton id="btnUpdateSalvar" update=":formDataTable :msgs" oncomplete="dialogPacienteCreate.hide()" icon="ui-icon-disk" title="#{bundle.salvar}" value="#{bundle.salvar}" action="#{pacienteBean.salvar}" />
+								<p:commandButton id="btnCreateCancelar" oncomplete="dialogPacienteCreate.hide()" icon="ui-icon-cancel" title="#{bundle.cancelar}" value="#{bundle.cancelar}"/>
+							</f:facet>
+						</h:panelGrid>
+					</p:dialog>
+				</h:form>
+			</div>
+		</div>
+		<div id="bottom" class="ui-widget-header ui-corner-all">
+			&copy;2013
+		</div>
+		
+		<script type="text/javascript">  
+		    function handleLoginRequest(xhr, status, args) {
+		        if(args.loggerOut || !args.loggedIn) {
+			        location.href = args.url;
+			    }
+		    }
+		    function handleSubmit(xhr, status, args, dialog) {
+		        var jqDialog = jQuery('#'+dialog.id);
+		        if(args.validationFailed) {
+		            jqDialog.effect('shake', { times:3 }, 100);
+		        } else {
+		            dialog.hide();
+		        }
+		    }
+		</script>
+	</h:body>
+</html>
