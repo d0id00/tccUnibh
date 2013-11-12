@@ -23,6 +23,8 @@ public interface GenericDAO<T extends AbstractEntity> {
     void delete(T entity);
  
     void deleteById(Integer id);
+    
+    void flush();
  
     T getById(Integer id);
     

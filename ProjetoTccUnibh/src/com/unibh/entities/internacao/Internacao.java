@@ -5,7 +5,6 @@ package com.unibh.entities.internacao;
 
 import java.util.Date;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -49,7 +48,7 @@ public class Internacao extends AbstractEntity {
 	@JoinColumn(name="idPaciente")
 	private Paciente paciente;
 	
-	@OneToOne(mappedBy = "internacao", cascade = CascadeType.ALL)
+	@OneToOne
 	@JoinColumn(name = "idAcompanhamento")
 	private Acompanhamento acompanhamento;
 

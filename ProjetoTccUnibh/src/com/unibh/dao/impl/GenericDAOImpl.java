@@ -11,7 +11,6 @@ import com.uaihebert.factory.EasyCriteriaFactory;
 import com.uaihebert.model.EasyCriteria;
 import com.unibh.dao.GenericDAO;
 import com.unibh.entities.AbstractEntity;
-import com.unibh.entities.paciente.Paciente;
 import com.util.StringUtils;
  
 @SuppressWarnings("unchecked")
@@ -57,6 +56,10 @@ public abstract class GenericDAOImpl<T extends AbstractEntity> implements Generi
     public List<T> findAll() {
         return entityManager.createQuery(("From " + getTypeClass().getName()))
                 .getResultList();
+    }
+    
+    public void flush() {
+    	entityManager.flush();
     }
     
 	public T getByParam(String field, Object param) {

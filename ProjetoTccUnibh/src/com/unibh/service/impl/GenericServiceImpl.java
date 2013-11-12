@@ -47,6 +47,11 @@ public abstract class GenericServiceImpl<T extends AbstractEntity> implements Ge
 	public void deleteById(Integer id) {
 		getDao().deleteById(id);
 	}
+	
+	@Override
+	public void flush() {
+		getDao().flush();
+	}
 
 	@Override
 	public T getById(Integer id) {
