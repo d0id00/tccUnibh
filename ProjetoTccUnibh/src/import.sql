@@ -2,23 +2,16 @@ INSERT INTO `role`
             (`descricao`,
              `nome`,
              `status`)
-VALUES ('Administrador de Sistema',
-        'Admin',
-        'ATIVO');e;
+VALUES ('Administrador de Sistema', 'Admin', 'ATIVO');
         
 INSERT INTO `usuario`
             (`dataReg`,
              `login`,
              `nome`,
              `senha`,
-             `status`,
+             `idStatus`,
              `idRole`)
-VALUES ('2013-01-01 00:00:00',
-        'admin',
-        'Administrador',
-        'admin',
-        'ATIVO',
-        1);     
+VALUES ('2013-01-01 00:00:00', 'admin', 'Administrador', 'admin', 3, 1);     
 
 
 INSERT INTO STATUS(idStatus, nome, tipo) VALUES(1, "Aberto", "Other");
