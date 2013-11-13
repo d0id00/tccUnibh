@@ -35,17 +35,17 @@
 				<p:growl id="msgs" showDetail="true" />
 				<h:form>
 					<p:commandButton id="btnCreateUsuario" update=":formCreate" oncomplete="dialogUsuarioCreate.show()" 
-						icon="ui-icon-document" title="#{bundle.CriarUsuario}" value="#{bundle.CriarUsuario}"/>
+						icon="ui-icon-document" title="#{bundle.CriarUsuario}" value="#{bundle.CriarUsuario}" action="#{usuarioBean.novoUsuario}"/>
 				</h:form>
 				<h:form id="formDataTable">
 					<p:dataTable id="tabelaUsuario" var="user" value="#{usuarioBean.usuarios}">
-						<p:column headerText="#{bundle.Codigo}" style="width:10%">
+						<p:column headerText="#{bundle.Codigo}" style="width:7%">
 							<h:outputText value="#{user.id}" />
 						</p:column>
 						<p:column headerText="#{bundle.Nome}" style="width:50%">
 							<h:outputText value="#{user.nome}" />
 						</p:column>
-						<p:column headerText="#{bundle.Login}" style="width:15%">
+						<p:column headerText="#{bundle.Login}" style="width:16%">
 							<h:outputText value="#{user.login}" />
 						</p:column>
 						<p:column headerText="#{bundle.Status}" style="width:10%">
@@ -56,7 +56,7 @@
 								<f:convertDateTime/>
 							</h:outputText>
 						</p:column>
-						<p:column style="width:5%">
+						<p:column style="width:7%">
 							<p:commandButton id="btnUpdateUsuario" update=":formUpdate" oncomplete="dialogUsuarioUpdate.show()" 
 								icon="ui-icon-note" title="#{bundle.AlterarUsuario}">
 								<f:setPropertyActionListener value="#{user}" target="#{usuarioBean.selectedUsuario}" />

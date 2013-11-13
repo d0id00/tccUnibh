@@ -108,10 +108,9 @@ public class AcompanhamentoBean extends AbstractManagerBean {
 	public void salvar() {
 		try {
 			acompanhamentoService.save(selectedAcompanhamento);
-			acompanhamentoService.flush();
 			Internacao internacao = internacaoService.getById(selectedAcompanhamento.getInternacao().getId());
 			internacao.setAcompanhamento(acompanhamentoService.getById(selectedAcompanhamento.getId()));
-			internacaoService.save(internacao);
+			internacaoService.update(internacao);
 			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Acompanhamento Paciente cadastrado com sucesso!", null);
 			FacesContext.getCurrentInstance().addMessage(null, message);
 		} catch (Exception e) {
@@ -125,6 +124,9 @@ public class AcompanhamentoBean extends AbstractManagerBean {
 	public void atualizar() {
 		try {
 			acompanhamentoService.update(this.selectedAcompanhamento);
+			Internacao internacao = internacaoService.getById(getSelectedAcompanhamento().getInternacao().getId());
+			internacao.calcStatus();
+			internacaoService.update(internacao);
 			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Acompanhamento Paciente atualizado com sucesso!", null);
 			FacesContext.getCurrentInstance().addMessage(null, message);
 		} catch (Exception e) {
@@ -137,6 +139,9 @@ public class AcompanhamentoBean extends AbstractManagerBean {
 	
 	public void remover() {
 		try {
+			Internacao internacao = internacaoService.getById(getSelectedAcompanhamento().getInternacao().getId());
+			internacao.setAcompanhamento(null);
+			internacaoService.update(internacao);
 			acompanhamentoService.delete(getSelectedAcompanhamento());
 			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Acompanhamento Paciente removido com sucesso!", null);
 			FacesContext.getCurrentInstance().addMessage(null, message);

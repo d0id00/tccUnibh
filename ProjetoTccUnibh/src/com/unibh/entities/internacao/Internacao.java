@@ -133,5 +133,15 @@ public class Internacao extends AbstractEntity {
 			setStatus(Status.OPEN);
 		}
 	}
+
+	public boolean isClosed() {
+		return Status.CLOSED.equals(getStatus());
+	}
+	
+	public void checkStatus() throws Exception {
+		if (isClosed()) {
+			throw new Exception("Erro. A internação que deseja atualizar já encontra-se fechada.");
+		}
+	}
 	
 }

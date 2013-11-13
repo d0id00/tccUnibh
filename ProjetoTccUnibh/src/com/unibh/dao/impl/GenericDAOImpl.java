@@ -37,7 +37,7 @@ public abstract class GenericDAOImpl<T extends AbstractEntity> implements Generi
  
     public void delete(T entity) {
         try {
-            entity = getById(entity.getId());
+        	entity = getById(entity.getId());
             entityManager.remove(entity);
         } catch (Exception e) {
             e.printStackTrace();

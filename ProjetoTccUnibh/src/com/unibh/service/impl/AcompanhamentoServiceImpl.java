@@ -41,8 +41,16 @@ public class AcompanhamentoServiceImpl extends GenericServiceImpl<Acompanhamento
 	
 	@Override
 	public void update(Acompanhamento entity) throws Exception {
+		entity.checkStatus();
 		entity.checkFields();
 		entity.calcStatus();
 		super.update(entity);
 	}
+	
+	@Override
+	public void delete(Acompanhamento entity) throws Exception {
+		entity.checkStatus();
+		super.delete(entity);
+	}
+	
 }

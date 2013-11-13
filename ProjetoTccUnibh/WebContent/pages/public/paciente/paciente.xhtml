@@ -35,7 +35,7 @@
 				<p:growl id="msgs" showDetail="true" />
 				<h:form>
 					<p:commandButton id="btnCreatePaciente" update=":formCreate" oncomplete="dialogPacienteCreate.show()" 
-						icon="ui-icon-document" title="#{bundle.CriarPaciente}" value="#{bundle.CriarPaciente}"/>
+						icon="ui-icon-document" title="#{bundle.CriarPaciente}" value="#{bundle.CriarPaciente}" />
 				</h:form>
 				<h:form id="formDataTable">
 					<p:dataTable id="tabelaPaciente" var="paciente" value="#{pacienteBean.pacientes}">

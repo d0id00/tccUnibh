@@ -27,7 +27,7 @@ public interface GenericService<T extends AbstractEntity> {
 		 
     void update(T entity) throws Exception;
  
-    void delete(T entity);
+    void delete(T entity) throws Exception;
  
     void deleteById(Integer id);
     

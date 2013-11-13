@@ -131,7 +131,6 @@ public class Acompanhamento extends AbstractEntity {
 		} else {
 			setStatus(Status.OPEN);
 		}
-		getInternacao().calcStatus();
 	}
 	
 	private void checkDesfecho() throws Exception {
@@ -167,6 +166,12 @@ public class Acompanhamento extends AbstractEntity {
 
 	public boolean isOpen() {
 		return Status.OPEN.equals(getStatus());
+	}
+
+	public void checkStatus() throws Exception {
+		if (isClosed()) {
+			throw new Exception("Erro. O acompanhamento já encontra-se fechado.");
+		}
 	}
 
 }

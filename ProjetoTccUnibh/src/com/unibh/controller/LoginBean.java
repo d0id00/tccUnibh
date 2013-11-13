@@ -44,7 +44,7 @@ public class LoginBean extends AbstractManagerBean {
         if(this.usuario != null) {
 	        loggedIn = true;
 	        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("usuario", usuario.getLogin());
-	        msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Welcome", this.usuario.getNome());
+	        msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Bem Vindo ", this.usuario.getNome());
 	        url = Util.basepathlogin()+"pages/public/inicio.jsf";
 		} else {  
 	        loggedIn = false;  

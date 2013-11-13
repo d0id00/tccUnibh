@@ -39,7 +39,7 @@ public abstract class GenericServiceImpl<T extends AbstractEntity> implements Ge
 	}
 
 	@Override
-	public void delete(T entity) {
+	public void delete(T entity) throws Exception {
 		getDao().delete(entity);
 	}
 

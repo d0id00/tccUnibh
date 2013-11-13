@@ -109,7 +109,7 @@ public class InternacaoBean extends AbstractManagerBean {
 			FacesContext.getCurrentInstance().addMessage(null, message);
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
-			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro ao remover o usuário!", null);
+			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null);
 			FacesContext.getCurrentInstance().addMessage(null, message);
 		}
 		novoInternacao();

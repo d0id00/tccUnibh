@@ -39,21 +39,24 @@
 				</h:form>
 				<h:form id="formDataTable">
 					<p:dataTable id="tabelaPaciente" var="internacao" value="#{internacaoBean.internacoes}">
-						<p:column headerText="#{bundle.Codigo}" style="width:10%">
+						<p:column headerText="#{bundle.Codigo}" style="width:7%">
 							<h:outputText value="#{internacao.id}" />
 						</p:column>
-						<p:column headerText="#{bundle.Nome}" style="width:42%">
+						<p:column headerText="#{bundle.Nome}" style="width:23%">
 							<h:outputText value="#{internacao.paciente.nome}" />
 						</p:column>
-						<p:column headerText="#{bundle.Internacao}" style="width:10%">
+						<p:column headerText="#{bundle.Internacao}" style="width:7%">
 							<h:outputText value="#{internacao.dataInternacao.time}" >
 								<f:convertDateTime/>
 							</h:outputText>
 						</p:column>
-						<p:column headerText="#{bundle.Diagnostico}" style="width:10%">
+						<p:column headerText="#{bundle.Status}" style="width:7%">
+							<h:outputText value="#{internacao.status}" />
+						</p:column>
+						<p:column headerText="#{bundle.Diagnostico}" style="width:13%">
 							<h:outputText value="#{internacao.diagnostico}" />
 						</p:column>
-						<p:column headerText="#{bundle.Observacao}" style="width:10%">
+						<p:column headerText="#{bundle.Observacao}" style="width:36%">
 							<h:outputText value="#{internacao.observacao}" />
 						</p:column>
 						<p:column style="width:7%">

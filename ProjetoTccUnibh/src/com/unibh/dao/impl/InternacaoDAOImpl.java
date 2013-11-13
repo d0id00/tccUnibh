@@ -37,4 +37,16 @@ public class InternacaoDAOImpl extends GenericDAOImpl<Internacao> implements Int
 		return query.getResultList();
 	}
 
+	@Override
+	public Internacao hasInternacaoAbertaParaPaciente(Integer idPaciente) {
+		try {
+			EasyCriteria<Internacao> easy = createEasyCriteria();
+			easy.andEquals("paciente", idPaciente);
+			easy.andEquals("status", Status.OPEN);
+			return easy.getSingleResult();
+		} catch (Exception e) {
+		}
+		return null;
+	}
+
 }
