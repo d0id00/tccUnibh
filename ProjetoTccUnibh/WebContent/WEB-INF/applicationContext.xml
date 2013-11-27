@@ -27,7 +27,8 @@
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
 		<property name="url" value="jdbc:mysql://localhost:3306/projetotccunibh" />
-		<property name="username" value="root" />
+		<property name="username" value="adminmUKLu5p" />
+		<property name="password" value="pMY-AQYYKDXt" />
 	</bean>
 
 	<bean id="entityManagerFactory"
